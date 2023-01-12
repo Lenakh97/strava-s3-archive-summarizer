@@ -1,5 +1,6 @@
 import { readdir, readFile } from 'fs/promises'
 import path from 'path'
+import { divideArchiveInClubAndWeek } from './lib/divideArchiveInClubAndWeek.js'
 import { summarizeActivities } from './lib/summarizeActivities.js'
 import { summarizeTeamData } from './lib/summarizeTeamData.js'
 
@@ -15,7 +16,6 @@ for (const file of fileArray) {
 	}
 	continue
 }
-
 const allTeamData = summarizeTeamData(allData)
 console.log(allTeamData)
 const teamActivities = summarizeActivities(allData)
@@ -26,11 +26,14 @@ var distanceItems = Object.keys(allTeamData).map((key) => {
 	return [key, allTeamData[key]]
 })
 distanceItems.sort((a, b) => Object.values(b[1])[0] - Object.values(a[1])[0])
-console.log('Top 3 distance:', distanceItems.slice(0, 3))
+//console.log('Top 3 distance:', distanceItems.slice(0, 3))
 
 //sorting by time
 var timeItems = Object.keys(allTeamData).map((key) => {
 	return [key, allTeamData[key]]
 })
 timeItems.sort((a, b) => Object.values(b[1])[1] - Object.values(a[1])[1])
-console.log('Top 3 time', timeItems.slice(0, 3))
+//console.log('Top 3 time', timeItems.slice(0, 3))
+
+const divided = await divideArchiveInClubAndWeek()
+console.log(divided['2'].teams)

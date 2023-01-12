@@ -1,5 +1,5 @@
 import { readdir } from "fs/promises"
-import { getFirstDate } from "./divideArchiveInWeeks.js"
+import { getFirstDate } from "./getFirstDate.js"
 
 export const divideIntoweeks = async (weekNumber: number, folderName: string) => {
     

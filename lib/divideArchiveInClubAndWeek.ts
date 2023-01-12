@@ -1,7 +1,7 @@
-import { divideIntoTeams, teamsSummary } from "./divideIntoTeams";
-import { divideIntoweeks } from "./divideIntoWeeks";
+import { divideIntoTeams, teamsSummary } from "./divideIntoTeams.js";
+import { divideIntoweeks } from "./divideIntoWeeks.js";
 
-type ArchiveDivided = Record<number, {
+export type ArchiveDivided = Record<number, {
 	teams: teamsSummary;}>
 
 

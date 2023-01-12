@@ -1,6 +1,6 @@
 import { readdir, readFile } from 'fs/promises'
 import path from 'path'
-import { divideArchiveInClubAndWeek } from './lib/divideArchiveInClubAndWeek.js'
+import { ArchiveDivided, divideArchiveInClubAndWeek } from './lib/divideArchiveInClubAndWeek.js'
 import { summarizeActivities } from './lib/summarizeActivities.js'
 import { summarizeTeamData } from './lib/summarizeTeamData.js'
 
@@ -36,4 +36,29 @@ timeItems.sort((a, b) => Object.values(b[1])[1] - Object.values(a[1])[1])
 //console.log('Top 3 time', timeItems.slice(0, 3))
 
 const divided = await divideArchiveInClubAndWeek()
-console.log(divided['2'].teams)
+
+export type Winners = Record<string,{winner: string[];}>
+
+
+export const pickRandomWinners = async (weekNumber: number, divided: ArchiveDivided): Promise<Winners> => {
+	const winners = {} as Winners
+	const teams = divided[`${weekNumber}`].teams
+	for (const team in teams){
+		const fileArray = divided[`${weekNumber}`].teams[team].files
+		const random = Math.floor(Math.random() * fileArray.length)
+		const folderName = './archive'
+		const randomFile = fileArray[random]
+		const filePath = path.join(folderName, randomFile)
+		const rawData = await readFile(filePath)
+		const JSONData = JSON.parse(rawData.toString())
+		for (let person=0; person<5; person++){
+			const randomPerson =  JSONData[Math.floor(Math.random() * JSONData.length)].athlete
+			const str = randomPerson.firstname + ', ' + randomPerson.lastname + '; '
+			winners[team].winner.push(str)
+		}
+		
+	}
+	return winners
+}
+
+console.log(await pickRandomWinners(2,divided))

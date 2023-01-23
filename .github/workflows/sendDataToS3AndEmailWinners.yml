@@ -30,4 +30,4 @@ jobs:
         run: aws s3 sync s3://strava-archive ./archive
 
       - name: Send winners to s3 and send email
-        run: npx tsc sendWinners.ts
+        run: npx tsx sendWinners.ts

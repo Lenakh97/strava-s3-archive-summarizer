@@ -13,11 +13,12 @@ are active in a club. If not we would have an infinite loop.
 export const pickRandomWinners = async (
 	weekNumber: number,
 	divided: ArchiveDivided,
+	folderName: string
 ): Promise<Winners> => {
 	const winners = {} as Winners
 	const teams = divided[`${weekNumber}`].teams
 	for (const team in teams) {
-		let JSONData = await getJSONData(divided, weekNumber, team)
+		let JSONData = await getJSONData(divided, weekNumber, team, folderName)
 		for (let person = 0; person < 4; person++) {
 			let randomPerson =
 				JSONData[Math.floor(Math.random() * JSONData.length)].athlete
@@ -29,7 +30,7 @@ export const pickRandomWinners = async (
 			}
 			let counter = 0
 			while (winners[team].winner.includes(str) && counter < 150) {
-				JSONData = await getJSONData(divided, weekNumber, team)
+				JSONData = await getJSONData(divided, weekNumber, team, folderName)
 				let rnd = Math.random()
 				randomPerson = JSONData[Math.floor(rnd * JSONData.length)].athlete
 				str = randomPerson.firstname + ', ' + randomPerson.lastname
@@ -45,9 +46,9 @@ export const getJSONData = async (
 	divided: ArchiveDivided,
 	weekNumber: number,
 	team: string,
+	folderName: string
 ) => {
 	const fileArray = divided[`${weekNumber}`].teams[team].files
-	const folderName = './archive'
 	let JSONData = [] as any[]
 	while (JSONData[0] === undefined) {
 		let random = Math.floor(Math.random() * fileArray.length)

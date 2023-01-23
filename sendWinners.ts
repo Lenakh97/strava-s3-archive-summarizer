@@ -4,19 +4,21 @@ import { pickRandomWinners } from './lib/pickRandomWinners.js'
 import { weekFolderName } from './lib/weekFolderName.js'
 import { weekNumber } from './lib/weekNumber.js'
 import { sendMail } from './sendMail.js'
+
 const s3 = new AWS.S3({
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   })
 
-
 export type Winners = Record<string,{winner: string[];}>
 
-const sendWinnersToBucket = async () => {
+const sendWinnersToBucket = async (folderName: string) => {
     const week = weekNumber()
     const weekFolder = weekFolderName()
-	const divided = await divideArchiveInClubAndWeek(week)
-    const winners = await pickRandomWinners(week,divided)
+	  const divided = await divideArchiveInClubAndWeek(week, folderName)
+    console.log(divided)
+    const winners = await pickRandomWinners(week,divided, folderName)
+    console.log(winners)
     const body = JSON.stringify(winners, null, 2)
     var params = {
         Body: body, 
@@ -30,15 +32,29 @@ const sendWinnersToBucket = async () => {
         data = {
          ETag: "\"6805f2cfc46c0f04559748bb039d69ae\"", 
          VersionId: "Bvq0EDKxOcXLJXNo_Lkz37eM3R4pfzyQ"
-        }
-        */
+        }*/
+        
       });
-      console.log(week)
-      console.log(weekFolder)
-      console.log(divided)
-    sendMail(week)
-
-    //email Håkon
+      const json = JSON.stringify(winners)
+      const parsed = JSON.parse(json)
+      const content = (`Winners week ${week}:` + 
+      '<br> <b>Omega:</b> ' + 
+      parsed['232813'].winner.map((winnerName: string) => '<br>' + winnerName ) +
+      '<br> <b>Oslo:</b>' + 
+      parsed['838200'].winner.map((winnerName: string) => '<br>' + winnerName ) +
+      '<br> <b>Trondheim:</b>' + 
+      parsed['838203'].winner.map((winnerName: string) => '<br>' + winnerName ) +
+      '<br> <b>Finland: </b>' + 
+      parsed['838205'].winner.map((winnerName: string) => '<br>' + winnerName ) +
+      '<br> <b>APAC: </b>' + 
+      parsed['838207'].winner.map((winnerName: string) => '<br>' + winnerName ) +
+      '<br> <b>USA: </b>' + 
+      parsed['838209'].winner.map((winnerName: string) => '<br>' + winnerName ) +
+      '<br> <b>Europe:</b>' + 
+      parsed['838211'].winner.map((winnerName: string) => '<br>' + winnerName ) +
+      '<br> <b>Poland:</b>' + 
+      parsed['982093'].winner.map((winnerName: string) => '<br>' + winnerName ))
+    sendMail(week, content)
 }
 
-sendWinnersToBucket();
+sendWinnersToBucket('./archive');

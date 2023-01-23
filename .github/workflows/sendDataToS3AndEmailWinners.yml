@@ -1,6 +1,8 @@
 name: Send winners to S3 bucket and email winners
 
-on: [push]
+on:
+  schedule:
+    - cron: "0 20 * * *"
 
 env:
   GITHUB_TOKEN: ${{ secrets.TOKEN }}

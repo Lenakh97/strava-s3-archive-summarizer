@@ -3,7 +3,7 @@ import { divideIntoweeks } from "./divideIntoWeeks.js"
 
 describe('divideIntoWeeks()', ()=> {
     it('should divide weekly data into team weekly data', async ()=>  {
-        const weeklyData = await divideIntoweeks(1,'./testData/week1')
+        const weeklyData = await divideIntoweeks(34,'./testData/week1')
 
         expect(divideIntoTeams(weeklyData)).toMatchObject({
             '232813': {

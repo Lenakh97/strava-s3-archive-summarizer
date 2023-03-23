@@ -16,6 +16,7 @@ export const sendMail = async (week: number, content: any) => {
 			ToAddresses: [
 				'lena.haraldseid@nordicsemi.no',
 				'hakon.haugen@nordicsemi.no',
+				'lenaharaldseid@gmail.com'
 			],
 		},
 

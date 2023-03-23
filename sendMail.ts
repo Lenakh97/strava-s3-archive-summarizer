@@ -13,7 +13,10 @@ export const sendMail = async (week: number, content: any) => {
 
 			CcAddresses: [],
 
-			ToAddresses: ['lena.haraldseid@nordicsemi.no'],
+			ToAddresses: [
+				'lena.haraldseid@nordicsemi.no',
+				'hakon.haugen@nordicsemi.no',
+			],
 		},
 
 		Message: {
